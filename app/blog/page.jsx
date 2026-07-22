@@ -4,7 +4,7 @@ import { PageHero } from '../../components/Sections';
 
 export const metadata = {
   title: 'Blog & News',
-  description: 'Company updates and logistics insights from the Drona Logitech team.',
+  description: 'Company updates and logistics insights from the Drona Valuechain team.',
 };
 
 export default function BlogPage() {

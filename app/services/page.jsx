@@ -5,7 +5,7 @@ import Reveal from '../../components/Reveal';
 export const metadata = {
   title: 'Services',
   description:
-    'In-plant services, warehousing & storage, inventory management, packaging solutions and last-mile delivery — integrated logistics services from Drona Logitech.',
+    'In-plant services, warehousing & storage, inventory management, packaging solutions and last-mile delivery — integrated logistics services from Drona Valuechain.',
 };
 
 const process = [

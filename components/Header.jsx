@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { nav } from '../lib/site';
+import Logo from './Logo';
 
 export default function Header() {
   const [open, setOpen] = useState(false);
@@ -27,9 +28,8 @@ export default function Header() {
       }`}
     >
       <div className="container-site flex h-20 items-center justify-between">
-        <Link href="/" className="flex items-center" onClick={() => setOpen(false)}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/images/logo.png" alt="Drona Logitech" className="h-11 w-auto sm:h-12" />
+        <Link href="/" className="flex items-center" aria-label="Drona Valuechain — home" onClick={() => setOpen(false)}>
+          <Logo className="h-10 sm:h-11" />
         </Link>
 
         <nav className="hidden items-center gap-1 lg:flex">

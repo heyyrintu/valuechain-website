@@ -2,7 +2,7 @@
 title: "5 Signs Your Supply Chain Needs an Integrated Logistics Partner"
 date: "2026-06-10"
 excerpt: "Multiple vendors, blind spots in inventory, rising freight costs — here are the warning signs that fragmented logistics is holding your business back."
-author: "Drona Logitech Team"
+author: "Drona Valuechain Team"
 tag: "Insights"
 ---
 

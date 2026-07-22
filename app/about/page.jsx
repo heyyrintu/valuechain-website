@@ -45,7 +45,7 @@ export default function AboutPage() {
               <p>
                 Most companies stitch together separate vendors for warehousing,
                 in-plant operations, packaging and distribution — and absorb the
-                friction in between. Drona Logitech was created to remove that
+                friction in between. Drona Valuechain was created to remove that
                 friction entirely.
               </p>
               <p>

@@ -33,7 +33,7 @@ const jsonLd = {
     addressRegion: site.address.state,
     addressCountry: 'IN',
   },
-  sameAs: [site.linkedin],
+  sameAs: [site.linkedin, site.x, site.instagram],
 };
 
 export default function RootLayout({ children }) {

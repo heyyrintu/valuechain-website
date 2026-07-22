@@ -44,27 +44,27 @@
     @apply font-display font-bold tracking-tight;
   }
 
-  /* warm cream surface */
+  /* cool light surface — soft green→blue→purple wash */
   .surface-cream {
-    background: linear-gradient(180deg, #fff9eb 0%, #fff4ec 100%);
+    background: linear-gradient(135deg, #ecfdf3 0%, #eef3fb 52%, #f7f0fb 100%);
   }
   /* dotted grid texture for light surfaces */
   .grid-texture-light {
-    background-image: radial-gradient(rgba(222, 28, 28, 0.07) 1.5px, transparent 1.5px);
+    background-image: radial-gradient(rgba(63, 108, 196, 0.08) 1.5px, transparent 1.5px);
     background-size: 26px 26px;
   }
   /* giant outlined ghost text on light bg */
   .text-ghost-dark {
-    -webkit-text-stroke: 1.5px rgba(222, 28, 28, 0.13);
+    -webkit-text-stroke: 1.5px rgba(63, 108, 196, 0.14);
     color: transparent;
   }
   .text-ghost-sun {
-    -webkit-text-stroke: 1.5px rgba(248, 144, 11, 0.25);
+    -webkit-text-stroke: 1.5px rgba(122, 59, 158, 0.22);
     color: transparent;
   }
-  /* gradient headline accent */
+  /* gradient headline accent — green → blue → purple (logo swirl) */
   .text-gradient {
-    @apply bg-gradient-to-r from-brand-500 via-brand-400 to-sun-500 bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-sun-400 via-brand-500 to-grape-500 bg-clip-text text-transparent;
   }
 
   /* soft animated blobs */
@@ -98,6 +98,29 @@
   }
   .animate-pop {
     animation: pop 2.4s ease-in-out infinite;
+  }
+
+  /* ── Hero value-chain signature ── */
+  .chain-spine {
+    background: linear-gradient(180deg, #34c26e 0%, #3f6cc4 50%, #7a3b9e 100%);
+  }
+  .chain-spine::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(180deg, transparent 0%, rgba(255, 255, 255, 0.95) 50%, transparent 100%);
+    background-size: 100% 45%;
+    background-repeat: no-repeat;
+    animation: chainflow 5s linear infinite;
+  }
+  .chain-packet {
+    top: 6%;
+    animation: chainpacket 5s linear infinite;
+  }
+  .stage-node {
+    animation: nodepulse 5s ease-in-out infinite;
+    animation-delay: calc(var(--i) * 1s - 0.5s);
   }
 
   .prose-blog h2 {
@@ -145,10 +168,71 @@
   0%, 100% { transform: scale(1); opacity: 0.85; }
   50% { transform: scale(1.35); opacity: 1; }
 }
+@keyframes chainflow {
+  0% { background-position: 0 -50%; }
+  100% { background-position: 0 150%; }
+}
+@keyframes chainpacket {
+  0% { top: 6%; opacity: 0; }
+  8% { opacity: 1; }
+  92% { opacity: 1; }
+  100% { top: 94%; opacity: 0; }
+}
+@keyframes nodepulse {
+  0%, 16%, 100% {
+    box-shadow: 0 10px 15px -3px rgba(63, 108, 196, 0.25);
+    transform: scale(1);
+  }
+  6% {
+    box-shadow: 0 0 0 6px rgba(52, 194, 110, 0.18), 0 0 26px 5px rgba(63, 108, 196, 0.5);
+    transform: scale(1.09);
+  }
+}
 
 @media (prefers-reduced-motion: reduce) {
   .reveal { opacity: 1; transform: none; transition: none; }
-  .animate-marquee, .animate-float, .animate-float-slow, .animate-drive, .animate-dash, .animate-pop, .blob {
+  .animate-marquee, .animate-float, .animate-float-slow, .animate-drive, .animate-dash, .animate-pop, .blob,
+  .chain-packet, .stage-node {
     animation: none !important;
   }
+  .chain-spine::after { animation: none !important; opacity: 0; }
+  .chain-packet { opacity: 1; }
+}
+
+/* ── Horizontal value-chain rail (Services section echo) ── */
+.chain-rail {
+  background: linear-gradient(90deg, #34c26e 0%, #3f6cc4 50%, #7a3b9e 100%);
+}
+.chain-rail::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.95) 50%, transparent 100%);
+  background-size: 45% 100%;
+  background-repeat: no-repeat;
+  animation: chainflow-x 5s linear infinite;
+}
+.chain-packet-x {
+  left: 0%;
+  animation: chainpacket-x 5s linear infinite;
+}
+.rail-node {
+  animation: nodepulse 5s ease-in-out infinite;
+  animation-delay: calc(var(--i) * 0.8s - 0.4s);
+}
+@keyframes chainflow-x {
+  0% { background-position: -50% 0; }
+  100% { background-position: 150% 0; }
+}
+@keyframes chainpacket-x {
+  0% { left: 0%; opacity: 0; }
+  8% { opacity: 1; }
+  92% { opacity: 1; }
+  100% { left: 100%; opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .chain-packet-x, .rail-node { animation: none !important; }
+  .chain-rail::after { animation: none !important; opacity: 0; }
+  .chain-packet-x { opacity: 1; }
 }

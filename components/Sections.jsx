@@ -43,7 +43,7 @@ export function ServiceCard({ service, index = 0, anchor = false }) {
     <Reveal delay={index * 80} className="h-full">
       <div
         id={anchor ? service.slug : undefined}
-        className="group relative flex h-full flex-col overflow-hidden rounded-3xl border border-ink-100 bg-white p-8 transition-all duration-300 hover:-translate-y-1.5 hover:border-sun-300 hover:shadow-[0_28px_60px_-26px_rgba(222,28,28,0.3)]"
+        className="group relative flex h-full flex-col overflow-hidden rounded-3xl border border-ink-100 bg-white p-8 transition-all duration-300 hover:-translate-y-1.5 hover:border-sun-300 hover:shadow-[0_28px_60px_-26px_rgba(63,108,196,0.3)]"
       >
         <span className="display text-ghost-sun pointer-events-none absolute -right-2 -top-6 select-none text-7xl">
           {String(index + 1).padStart(2, '0')}
@@ -100,7 +100,7 @@ export function StatStrip({ stats }) {
     <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
       {stats.map((s, i) => (
         <Reveal key={s.label} delay={i * 90}>
-          <div className="group rounded-3xl border border-ink-100 bg-white p-7 text-center shadow-[0_18px_40px_-26px_rgba(222,28,28,0.35)] transition-all duration-300 hover:-translate-y-1 hover:border-sun-300">
+          <div className="group rounded-3xl border border-ink-100 bg-white p-7 text-center shadow-[0_18px_40px_-26px_rgba(63,108,196,0.35)] transition-all duration-300 hover:-translate-y-1 hover:border-sun-300">
             <p className="display text-3xl text-brand-500 sm:text-4xl">
               <CountUp value={s.value} />
             </p>

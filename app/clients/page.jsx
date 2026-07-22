@@ -1,13 +1,23 @@
 import { PageHero, SectionHeading, CTABand } from '../../components/Sections';
 import Icon from '../../components/Icons';
+import ClientLogo from '../../components/ClientLogo';
 
 export const metadata = {
   title: 'Clients & Testimonials',
   description:
-    'Trusted by manufacturers and distributors across pharma, automotive and consumer sectors. Client testimonials and success stories from Drona Logitech.',
+    'Trusted by manufacturers and distributors across pharma, automotive and consumer sectors. Client testimonials and success stories from Drona Valuechain.',
 };
 
-// TODO: replace with approved client names/logos and real testimonials
+// `logo` points to the real logo file (drop the official image in public/images/clients/).
+// `fallback` is the bundled styled recreation, shown only until the real file exists.
+const clients = [
+  { name: 'Ashok Leyland', logo: '/images/clients/ashok-leyland.png', fallback: '/images/clients/ashok-leyland.svg' },
+  { name: 'Lifelong Online', logo: '/images/clients/lifelong-online.png', fallback: '/images/clients/lifelong-online.svg' },
+  { name: 'Eshopbox', logo: '/images/clients/eshopbox.jpg', fallback: '/images/clients/eshopbox.svg' },
+  { name: 'RedTape', logo: '/images/clients/redtape.png', fallback: '/images/clients/redtape.svg' },
+];
+
+// TODO: replace with approved client testimonials
 const testimonials = [
   {
     quote:
@@ -56,23 +66,25 @@ export default function ClientsPage() {
         intro="Manufacturers and distributors across pharma, automotive and consumer sectors rely on Drona to keep their supply chains moving."
       />
 
-      {/* Client logo strip — placeholder until approved logos are provided */}
+      {/* Client logo strip */}
       <section className="section">
         <div className="container-site">
           <SectionHeading eyebrow="Our Clients" title="Companies We Work With" center />
-          <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
-            {Array.from({ length: 6 }).map((_, i) => (
+          <div className="mx-auto mt-12 grid max-w-5xl grid-cols-2 items-stretch gap-4 sm:grid-cols-4">
+            {clients.map((c) => (
               <div
-                key={i}
-                className="flex h-20 items-center justify-center rounded-lg border border-dashed border-navy-200 bg-navy-50 text-xs font-medium text-navy-400"
+                key={c.name}
+                className="flex h-32 items-center justify-center rounded-2xl border border-ink-100 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-brand-200 hover:shadow-lg"
               >
-                Client Logo
+                <ClientLogo
+                  name={c.name}
+                  src={c.logo}
+                  fallback={c.fallback}
+                  className="max-h-16 w-auto max-w-[80%] object-contain sm:max-h-20"
+                />
               </div>
             ))}
           </div>
-          <p className="mt-4 text-center text-xs text-slate-400">
-            Client logos will be displayed here once approvals are confirmed.
-          </p>
         </div>
       </section>
 

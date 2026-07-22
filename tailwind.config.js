@@ -1,35 +1,51 @@
 /** @type {import('tailwindcss').Config} */
 
-// Brand palette — Drona Logitech
-// Red    #DE1C1C (primary)
-// Yellow #FEA418 (accent)
-// Ink    — near-black neutrals for premium dark surfaces
+// Brand palette — Drona Valuechain Pvt Ltd
+// Logo swirl: Green #34C26E · Blue #3F6CC4 · Purple #7A3B9E
+// Accent dots: Lime #9BCD0E · Teal #54B9D6 · Magenta #C13C9E
+// Primary = blue (brand) · Secondary = green (sun, name kept for class compatibility)
 
+// Blue — primary (token name kept as `brand`)
 const brand = {
-  50: '#fdf2f2',
-  100: '#fbdada',
-  200: '#f7b2b2',
-  300: '#ef7d7d',
-  400: '#e74a4a',
-  500: '#DE1C1C',
-  600: '#c01414',
-  700: '#9d1212',
-  800: '#7f1414',
-  900: '#671414',
-  950: '#3f0808',
+  50: '#eef3fb',
+  100: '#d7e3f6',
+  200: '#b3c8ec',
+  300: '#86a5df',
+  400: '#5b82d2',
+  500: '#3F6CC4',
+  600: '#3055a4',
+  700: '#284684',
+  800: '#243c6c',
+  900: '#21355a',
+  950: '#16223b',
 };
 
+// Green — secondary highlight (token name kept as `sun` for class compatibility)
 const sun = {
-  50: '#fff9eb',
-  100: '#feefc7',
-  200: '#fdde8a',
-  300: '#fec64d',
-  400: '#FEA418',
-  500: '#f8900b',
-  600: '#dc6c06',
-  700: '#b64b09',
-  800: '#94390e',
-  900: '#7a300f',
+  50: '#ecfdf3',
+  100: '#d2f9e0',
+  200: '#a6f0c6',
+  300: '#6fe3a4',
+  400: '#34C26E',
+  500: '#22a85c',
+  600: '#178a4b',
+  700: '#156d3e',
+  800: '#145734',
+  900: '#11472c',
+};
+
+// Purple — tertiary accent
+const grape = {
+  50: '#f7f0fb',
+  100: '#ecd9f4',
+  200: '#dab6e9',
+  300: '#c089d9',
+  400: '#a05fc3',
+  500: '#7A3B9E',
+  600: '#663186',
+  700: '#54286c',
+  800: '#472458',
+  900: '#3c204a',
 };
 
 const ink = {
@@ -46,6 +62,11 @@ const ink = {
   950: '#0d0d10',
 };
 
+// Logo accent dots
+const lime = '#9BCD0E';
+const teal = '#54B9D6';
+const magenta = '#C13C9E';
+
 module.exports = {
   content: ['./app/**/*.{js,jsx}', './components/**/*.{js,jsx}'],
   theme: {
@@ -53,7 +74,11 @@ module.exports = {
       colors: {
         brand,
         sun,
+        grape,
         ink,
+        lime,
+        teal,
+        magenta,
         // legacy aliases so earlier class names keep working
         navy: ink,
         accent: brand,
