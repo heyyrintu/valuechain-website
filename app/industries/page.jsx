@@ -124,13 +124,13 @@ export default function IndustriesPage() {
 
                     <ul className="mt-7 grid gap-3 sm:grid-cols-2">
                       {ind.points.map((p, j) => (
-                        <Reveal key={p} delay={120 + j * 90}>
-                          <li className="flex items-start gap-3 rounded-2xl bg-ink-50 p-4 text-sm font-medium text-ink-800 transition-all duration-300 hover:-translate-y-0.5 hover:bg-white hover:shadow-md">
+                        <Reveal as="li" key={p} delay={120 + j * 90}>
+                          <div className="flex h-full items-start gap-3 rounded-2xl bg-ink-50 p-4 text-sm font-medium text-ink-800 transition-all duration-300 hover:-translate-y-0.5 hover:bg-white hover:shadow-md">
                             <span className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full ${m.chip}`}>
                               <Icon name="arrow" className="h-3 w-3" />
                             </span>
                             {p}
-                          </li>
+                          </div>
                         </Reveal>
                       ))}
                     </ul>

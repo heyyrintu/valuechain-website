@@ -6,8 +6,11 @@ import { useEffect, useRef } from 'react';
  * Scroll-reveal wrapper. Fades/slides children in when they enter the viewport.
  * Fails safe: reveals immediately if already in view, if IntersectionObserver
  * is unavailable, or after a short fallback timeout — content never gets stuck.
+ *
+ * `as` sets the wrapper element so the reveal can sit inside markup that only
+ * accepts specific children (e.g. `as="li"` inside a <ul>).
  */
-export default function Reveal({ children, delay = 0, className = '' }) {
+export default function Reveal({ children, delay = 0, className = '', as: Tag = 'div' }) {
   const ref = useRef(null);
 
   useEffect(() => {
@@ -45,8 +48,8 @@ export default function Reveal({ children, delay = 0, className = '' }) {
   }, []);
 
   return (
-    <div ref={ref} className={`reveal ${className}`} style={delay ? { transitionDelay: `${delay}ms` } : undefined}>
+    <Tag ref={ref} className={`reveal ${className}`} style={delay ? { transitionDelay: `${delay}ms` } : undefined}>
       {children}
-    </div>
+    </Tag>
   );
 }

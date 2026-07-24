@@ -100,6 +100,7 @@ const paths = {
     </>
   ),
   arrow: <path d="M5 12h14M13 6l6 6-6 6" />,
+  check: <path d="M20 6L9 17l-5-5" />,
 };
 
 export default function Icon({ name, className = 'h-6 w-6' }) {

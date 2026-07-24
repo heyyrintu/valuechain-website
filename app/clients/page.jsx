@@ -9,12 +9,28 @@ export const metadata = {
 };
 
 // `logo` points to the real logo file (drop the official image in public/images/clients/).
-// `fallback` is the bundled styled recreation, shown only until the real file exists.
+// If a file is missing, ClientLogo falls back to the client name as text.
 const clients = [
-  { name: 'Ashok Leyland', logo: '/images/clients/ashok-leyland.png', fallback: '/images/clients/ashok-leyland.svg' },
-  { name: 'Lifelong Online', logo: '/images/clients/lifelong-online.png', fallback: '/images/clients/lifelong-online.svg' },
-  { name: 'Eshopbox', logo: '/images/clients/eshopbox.jpg', fallback: '/images/clients/eshopbox.svg' },
-  { name: 'RedTape', logo: '/images/clients/redtape.png', fallback: '/images/clients/redtape.svg' },
+  { name: 'JMC Motor', logo: '/images/clients/jmc-motor.png' },
+  { name: 'Ananda Dairy', logo: '/images/clients/ananda-dairy.png' },
+  { name: 'Ashok Leyland', logo: '/images/clients/ashok-leyland.png' },
+  { name: 'Lifelong Online', logo: '/images/clients/lifelong-online.png' },
+  { name: 'Eshopbox', logo: '/images/clients/eshopbox.jpg' },
+  { name: 'RedTape', logo: '/images/clients/redtape.png' },
+];
+
+// Freshly onboarded partners — highlighted at the top of the page.
+const newWins = [
+  {
+    name: 'JMC Motor',
+    sector: 'Automotive',
+    win: 'Onboarded as an integrated logistics partner — bringing Drona’s in-plant and supply-chain discipline to their automotive operations.',
+  },
+  {
+    name: 'Ananda Dairy',
+    sector: 'Dairy · Transportation',
+    win: 'Awarded their transportation mandate — moving temperature-sensitive dairy on time, every time, across the network.',
+  },
 ];
 
 // TODO: replace with approved client testimonials
@@ -41,6 +57,11 @@ const testimonials = [
 
 const caseStudies = [
   {
+    title: 'Dairy Transportation for Ananda',
+    result: 'Trusted with time-critical dairy movement — reliable, temperature-aware transport that keeps product fresh from source to shelf.',
+    tags: ['Transportation', 'Dairy'],
+  },
+  {
     title: 'In-Plant Transformation for an Automotive OEM Supplier',
     result: 'Streamlined line feeding and kitting; improved material availability at point of use.',
     tags: ['In-Plant', 'Automotive'],
@@ -66,11 +87,39 @@ export default function ClientsPage() {
         intro="Manufacturers and distributors across pharma, automotive and consumer sectors rely on Drona to keep their supply chains moving."
       />
 
+      {/* Recently onboarded — the glorify band */}
+      <section className="section bg-navy-50">
+        <div className="container-site">
+          <SectionHeading
+            eyebrow="Latest Wins"
+            title="Newest Partners on Board"
+            intro="We’re proud to welcome two new names to the Drona family — the latest businesses to trust us with their supply chain."
+            center
+          />
+          <div className="mx-auto mt-12 grid max-w-4xl gap-6 sm:grid-cols-2">
+            {newWins.map((w) => (
+              <div
+                key={w.name}
+                className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-brand-500 to-brand-400 p-8 text-white shadow-xl shadow-brand-500/25"
+              >
+                <span className="inline-flex items-center gap-2 rounded-full bg-white/20 px-3 py-1 text-xs font-bold uppercase tracking-wider">
+                  <Icon name="check" className="h-3.5 w-3.5" />
+                  Newly Onboarded
+                </span>
+                <h3 className="mt-5 font-display text-2xl font-bold">{w.name}</h3>
+                <p className="mt-1 text-sm font-semibold text-brand-50">{w.sector}</p>
+                <p className="mt-4 leading-relaxed text-brand-50">{w.win}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Client logo strip */}
       <section className="section">
         <div className="container-site">
           <SectionHeading eyebrow="Our Clients" title="Companies We Work With" center />
-          <div className="mx-auto mt-12 grid max-w-5xl grid-cols-2 items-stretch gap-4 sm:grid-cols-4">
+          <div className="mx-auto mt-12 grid max-w-5xl grid-cols-2 items-stretch gap-4 sm:grid-cols-3">
             {clients.map((c) => (
               <div
                 key={c.name}
@@ -79,7 +128,6 @@ export default function ClientsPage() {
                 <ClientLogo
                   name={c.name}
                   src={c.logo}
-                  fallback={c.fallback}
                   className="max-h-16 w-auto max-w-[80%] object-contain sm:max-h-20"
                 />
               </div>

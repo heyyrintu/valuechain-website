@@ -4,7 +4,7 @@ export default function Logo({ className = 'h-11', showTagline = false }) {
     <span className="inline-flex items-center gap-2.5">
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        src="/images/logo-mark.svg"
+        src="/images/logo-mark.png"
         alt=""
         aria-hidden="true"
         className={`${className} w-auto`}

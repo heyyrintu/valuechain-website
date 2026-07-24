@@ -31,7 +31,9 @@ export default function BlogPostPage({ params }) {
           </Link>
           <div className="mt-6 flex items-center gap-3 text-xs">
             <span className="rounded-full bg-brand-500 px-3 py-1 font-semibold text-white">{post.tag}</span>
-            <time className="text-ink-500">{formatDate(post.date)}</time>
+            <time dateTime={post.date} className="text-ink-500">
+              {formatDate(post.date)}
+            </time>
           </div>
           <h1 className="display mt-4 text-3xl leading-tight text-ink-900 sm:text-4xl">{post.title}</h1>
           <p className="mt-4 text-sm text-ink-500">By {post.author}</p>

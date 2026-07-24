@@ -34,7 +34,9 @@ export default function BlogPage() {
                     <span className="rounded-full bg-accent-50 px-3 py-1 font-semibold text-accent-700">
                       {post.tag}
                     </span>
-                    <time className="text-slate-500">{formatDate(post.date)}</time>
+                    <time dateTime={post.date} className="text-slate-500">
+                      {formatDate(post.date)}
+                    </time>
                   </div>
                   <h2 className="mt-4 text-lg font-semibold text-navy-900 group-hover:text-accent-600">
                     {post.title}

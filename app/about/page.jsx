@@ -99,28 +99,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="section">
-        <div className="container-site">
-          <SectionHeading
-            eyebrow="Leadership"
-            title="The Team Behind Drona"
-            intro="Leadership profiles and photos coming soon. (Placeholder — names, titles and photos will be added here.)"
-            center
-          />
-          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {[1, 2, 3].map((i) => (
-              <div key={i} className="rounded-xl border border-dashed border-navy-200 p-8 text-center">
-                <span className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-navy-100 text-2xl font-bold text-navy-400">
-                  ?
-                </span>
-                <p className="mt-4 font-semibold text-navy-900">Leadership Name</p>
-                <p className="text-sm text-slate-500">Designation</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       <section className="pb-16">
         <div className="container-site">
           <StatStrip stats={stats} />

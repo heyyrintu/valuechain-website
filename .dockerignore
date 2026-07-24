@@ -1,0 +1,24 @@
+# Keep the build context small and avoid copying host-built artifacts into
+# the image — the container runs its own `npm ci && npm run build`.
+
+node_modules
+.next
+out
+
+.git
+.gitignore
+
+# Local tooling / editor state
+.claude
+.playwright-mcp
+.vscode
+.idea
+.DS_Store
+
+# Logs
+*.log
+dev-server.log
+
+# Docker's own files aren't needed inside the build context
+Dockerfile
+.dockerignore
