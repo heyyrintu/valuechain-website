@@ -1,6 +1,15 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getAllPosts, getPost, formatDate } from '../../../lib/posts';
+import {
+  canonical,
+  abs,
+  graph,
+  breadcrumbSchema,
+  blogPostingSchema,
+  jsonLdProps,
+  ogImage,
+} from '../../../lib/seo';
 
 export function generateStaticParams() {
   return getAllPosts().map((post) => ({ slug: post.slug }));
@@ -9,10 +18,26 @@ export function generateStaticParams() {
 export function generateMetadata({ params }) {
   const post = getPost(params.slug);
   if (!post) return {};
+  const path = `/blog/${post.slug}/`;
   return {
     title: post.title,
     description: post.excerpt,
-    openGraph: { title: post.title, description: post.excerpt, type: 'article' },
+    ...canonical(path),
+    openGraph: {
+      title: post.title,
+      description: post.excerpt,
+      url: abs(path),
+      type: 'article',
+      publishedTime: post.date,
+      authors: [post.author],
+      images: [ogImage],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: post.title,
+      description: post.excerpt,
+      images: [ogImage.url],
+    },
   };
 }
 
@@ -20,8 +45,18 @@ export default function BlogPostPage({ params }) {
   const post = getPost(params.slug);
   if (!post) notFound();
 
+  const path = `/blog/${post.slug}/`;
+  const schema = graph(
+    blogPostingSchema(post, path),
+    breadcrumbSchema([
+      { name: 'Blog', path: '/blog/' },
+      { name: post.title, path },
+    ])
+  );
+
   return (
     <>
+      <script {...jsonLdProps(schema)} />
       <section className="surface-cream relative overflow-hidden py-16">
         <div className="grid-texture-light absolute inset-0" aria-hidden="true" />
         <div className="blob right-[-4rem] top-[-4rem] h-64 w-64 bg-sun-200/60" aria-hidden="true" />

@@ -1,12 +1,16 @@
+import { pageMeta, graph, breadcrumbSchema, jsonLdProps } from '../../lib/seo';
 import { PageHero, SectionHeading, CTABand } from '../../components/Sections';
 import Icon from '../../components/Icons';
 import ClientLogo from '../../components/ClientLogo';
 
-export const metadata = {
+export const metadata = pageMeta({
   title: 'Clients & Testimonials',
   description:
     'Trusted by manufacturers and distributors across pharma, automotive and consumer sectors. Client testimonials and success stories from Drona Valuechain.',
-};
+  path: '/clients/',
+});
+
+const clientsSchema = graph(breadcrumbSchema([{ name: 'Clients', path: '/clients/' }]));
 
 // `logo` points to the real logo file (drop the official image in public/images/clients/).
 // If a file is missing, ClientLogo falls back to the client name as text.
@@ -81,6 +85,7 @@ const caseStudies = [
 export default function ClientsPage() {
   return (
     <>
+      <script {...jsonLdProps(clientsSchema)} />
       <PageHero
         ghost="CLIENTS" eyebrow="Clients & Testimonials"
         title="Trusted Where It Counts"

@@ -1,16 +1,19 @@
 import Link from 'next/link';
-import { site, services, industries, stats } from '../lib/site';
+import { site, services, industries, stats, companyFaqs } from '../lib/site';
+import { pageMeta, graph, faqSchema, jsonLdProps } from '../lib/seo';
 import { SectionHeading, CTABand, StatStrip } from '../components/Sections';
+import FAQ from '../components/FAQ';
 import Icon from '../components/Icons';
 import Reveal from '../components/Reveal';
 import Marquee from '../components/Marquee';
 import HeroChain from '../components/HeroChain';
 import ChainRail from '../components/ChainRail';
 
-export const metadata = {
+export const metadata = pageMeta({
   title: `${site.shortName} — Integrated Logistics & Supply Chain Solutions`,
   description: site.description,
-};
+  path: '/',
+});
 
 const whyUs = [
   {
@@ -78,6 +81,10 @@ const bento = {
 export default function HomePage() {
   return (
     <>
+      {/* Organization and WebSite schema live in the root layout; the homepage
+          adds only its own FAQ block. */}
+      <script {...jsonLdProps(graph(faqSchema(companyFaqs, '/')))} />
+
       {/* ───── Hero — bright & animated ───── */}
       <section className="surface-cream relative overflow-hidden">
         <div className="grid-texture-light absolute inset-0" aria-hidden="true" />
@@ -212,7 +219,7 @@ export default function HomePage() {
                 return (
                   <Reveal key={s.slug} delay={i * 60} className={`${m.span} h-full`}>
                     <Link
-                      href={`/services/#${s.slug}`}
+                      href={`/services/${s.slug}/`}
                       className="group relative flex h-full flex-col justify-between overflow-hidden rounded-3xl bg-gradient-to-br from-sun-500 via-brand-500 to-grape-600 p-8 text-white transition-all duration-300 hover:-translate-y-1 sm:p-10"
                     >
                       <span className="pointer-events-none absolute -right-8 -top-8 h-32 w-32 rounded-full bg-white/10" aria-hidden="true" />
@@ -240,7 +247,7 @@ export default function HomePage() {
               return (
                 <Reveal key={s.slug} delay={i * 60} className={`${m.span} h-full`}>
                   <Link
-                    href={`/services/#${s.slug}`}
+                    href={`/services/${s.slug}/`}
                     className={`group relative flex h-full flex-col overflow-hidden rounded-3xl border p-7 transition-all duration-300 hover:-translate-y-1.5 ${m.tile}`}
                   >
                     <span className="display pointer-events-none absolute right-5 top-4 select-none text-3xl text-ink-900/10">
@@ -295,7 +302,7 @@ export default function HomePage() {
             {industries.map((ind, i) => (
               <Reveal key={ind.slug} delay={i * 100}>
                 <Link
-                  href={`/industries/#${ind.slug}`}
+                  href={`/industries/${ind.slug}/`}
                   className="group flex h-full flex-col rounded-3xl border border-sun-200 bg-white p-8 shadow-[0_18px_45px_-28px_rgba(52,194,110,0.45)] transition-all duration-300 hover:-translate-y-1.5 hover:border-brand-300 hover:shadow-[0_28px_60px_-26px_rgba(63,108,196,0.35)]"
                 >
                   <span className="display text-ghost-sun text-5xl">{String(i + 1).padStart(2, '0')}</span>
@@ -336,6 +343,13 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      <FAQ
+        faqs={companyFaqs}
+        eyebrow="FAQ"
+        title="What people ask us"
+        intro="Straight answers about what we do, where we operate and how an engagement starts."
+      />
 
       <CTABand
         title="Ready to streamline your supply chain?"

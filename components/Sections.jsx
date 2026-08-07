@@ -51,9 +51,18 @@ export function ServiceCard({ service, index = 0, anchor = false }) {
         <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-brand-500 to-brand-400 text-white shadow-lg shadow-brand-500/30 transition-transform duration-300 group-hover:rotate-6 group-hover:scale-110">
           <Icon name={service.icon} className="h-7 w-7" />
         </span>
-        <h3 className="display mt-6 text-xl text-ink-900">{service.title}</h3>
-        <p className="mt-3 flex-1 text-sm leading-relaxed text-ink-600">{service.summary}</p>
-        <ul className="mt-5 space-y-2.5 text-sm text-ink-600">
+        {/* The heading is the link, so the anchor text is the service name —
+            a descriptive anchor pointing at the page we want ranking for that
+            term. The stretched-link span makes the whole card clickable
+            without nesting interactive elements. */}
+        <h3 className="display mt-6 text-xl text-ink-900">
+          <Link href={`/services/${service.slug}/`} className="transition-colors hover:text-brand-600">
+            <span className="absolute inset-0 z-10" aria-hidden="true" />
+            {service.title}
+          </Link>
+        </h3>
+        <p className="mt-3 text-sm leading-relaxed text-ink-600">{service.summary}</p>
+        <ul className="mt-5 flex-1 space-y-2.5 text-sm text-ink-600">
           {service.points.map((p) => (
             <li key={p} className="flex items-start gap-2.5">
               <span className="mt-1.5 h-1.5 w-4 shrink-0 rounded-full bg-sun-400" />
@@ -61,6 +70,10 @@ export function ServiceCard({ service, index = 0, anchor = false }) {
             </li>
           ))}
         </ul>
+        <span className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-brand-600">
+          Explore {service.title.toLowerCase()}
+          <Icon name="arrow" className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+        </span>
       </div>
     </Reveal>
   );

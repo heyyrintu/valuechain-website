@@ -1,17 +1,23 @@
 import Link from 'next/link';
 import { getAllPosts, formatDate } from '../../lib/posts';
 import { PageHero } from '../../components/Sections';
+import { pageMeta, graph, breadcrumbSchema, jsonLdProps } from '../../lib/seo';
 
-export const metadata = {
+export const metadata = pageMeta({
   title: 'Blog & News',
-  description: 'Company updates and logistics insights from the Drona Valuechain team.',
-};
+  description:
+    'Company updates and practical logistics insights from the Drona Valuechain team — warehousing, in-plant operations, inventory and distribution in India.',
+  path: '/blog/',
+});
+
+const blogSchema = graph(breadcrumbSchema([{ name: 'Blog', path: '/blog/' }]));
 
 export default function BlogPage() {
   const posts = getAllPosts();
 
   return (
     <>
+      <script {...jsonLdProps(blogSchema)} />
       <PageHero
         ghost="INSIGHTS" eyebrow="Blog & News"
         title="Insights from the Field"
