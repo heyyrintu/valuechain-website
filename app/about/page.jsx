@@ -1,11 +1,15 @@
 import { site, stats } from '../../lib/site';
+import { pageMeta, graph, breadcrumbSchema, jsonLdProps } from '../../lib/seo';
 import { PageHero, SectionHeading, CTABand, StatStrip } from '../../components/Sections';
 import Icon from '../../components/Icons';
 
-export const metadata = {
+export const metadata = pageMeta({
   title: 'About Us',
   description: `Learn about ${site.name} — founded in ${site.founded} by logistics veterans with 20+ years of experience, delivering integrated supply chain solutions across India.`,
-};
+  path: '/about/',
+});
+
+const aboutSchema = graph(breadcrumbSchema([{ name: 'About Us', path: '/about/' }]));
 
 const values = [
   {
@@ -28,6 +32,7 @@ const values = [
 export default function AboutPage() {
   return (
     <>
+      <script {...jsonLdProps(aboutSchema)} />
       <PageHero
         ghost="ABOUT" eyebrow="About Us"
         title="Logistics Veterans. Modern Execution."

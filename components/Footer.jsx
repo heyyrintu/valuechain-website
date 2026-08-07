@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { nav, site, services } from '../lib/site';
+import { nav, site, services, hasPhone, formatAddress } from '../lib/site';
 import Icon from './Icons';
 import Logo from './Logo';
 
@@ -77,7 +77,7 @@ export default function Footer() {
           <ul className="mt-4 space-y-2 text-sm">
             {services.map((s) => (
               <li key={s.slug}>
-                <Link href={`/services/#${s.slug}`} className="text-ink-600 transition hover:text-brand-500">
+                <Link href={`/services/${s.slug}/`} className="text-ink-600 transition hover:text-brand-500">
                   {s.title}
                 </Link>
               </li>
@@ -91,16 +91,20 @@ export default function Footer() {
           <ul className="mt-4 space-y-3 text-sm text-ink-600">
             <li className="flex items-start gap-2.5">
               <Icon name="pin" className="mt-0.5 h-4 w-4 shrink-0 text-brand-500" />
-              {site.address.line1}, {site.address.country}
+              {formatAddress()}
             </li>
             <li className="flex items-center gap-2.5">
               <Icon name="mail" className="h-4 w-4 shrink-0 text-brand-500" />
               <a href={`mailto:${site.email}`} className="transition hover:text-brand-500">{site.email}</a>
             </li>
-            <li className="flex items-center gap-2.5">
-              <Icon name="phone" className="h-4 w-4 shrink-0 text-brand-500" />
-              <a href={`tel:${site.phone.replace(/\s/g, '')}`} className="transition hover:text-brand-500">{site.phone}</a>
-            </li>
+            {/* Rendered only once a real number is configured — see lib/site.js.
+                A placeholder number published sitewide is worse than none. */}
+            {hasPhone && (
+              <li className="flex items-center gap-2.5">
+                <Icon name="phone" className="h-4 w-4 shrink-0 text-brand-500" />
+                <a href={`tel:${site.phone.replace(/\s/g, '')}`} className="transition hover:text-brand-500">{site.phone}</a>
+              </li>
+            )}
           </ul>
         </div>
       </div>

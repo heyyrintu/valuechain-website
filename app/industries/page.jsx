@@ -1,15 +1,17 @@
 import Link from 'next/link';
 import { industries } from '../../lib/site';
+import { pageMeta, graph, breadcrumbSchema, jsonLdProps } from '../../lib/seo';
 import { PageHero, CTABand } from '../../components/Sections';
 import Reveal from '../../components/Reveal';
 import Marquee from '../../components/Marquee';
 import Icon from '../../components/Icons';
 
-export const metadata = {
-  title: 'Industries',
+export const metadata = pageMeta({
+  title: 'Industries We Serve',
   description:
     'Specialised logistics for pharmaceutical, automotive & engineering, and FMCG & retail sectors — compliant, precise and built for scale.',
-};
+  path: '/industries/',
+});
 
 // Per-sector identity — icon, accent, and a floating proof tag
 const meta = {
@@ -47,6 +49,7 @@ const fallback = meta.automotive;
 export default function IndustriesPage() {
   return (
     <>
+      <script {...jsonLdProps(graph(breadcrumbSchema([{ name: 'Industries', path: '/industries/' }])))} />
       <PageHero
         ghost="SECTORS"
         eyebrow="Industries We Serve"
@@ -135,11 +138,15 @@ export default function IndustriesPage() {
                       ))}
                     </ul>
 
+                    {/* Points at the sector detail page rather than /contact/.
+                        The hub is the strongest page in this cluster, so its
+                        outbound links are what give the detail pages authority
+                        — and the anchor text carries the target keyword. */}
                     <Link
-                      href="/contact/"
+                      href={`/industries/${ind.slug}/`}
                       className={`mt-7 inline-flex items-center gap-2 text-sm font-semibold ${m.accent}`}
                     >
-                      Discuss your {ind.title.split(' ')[0].toLowerCase()} requirements
+                      More on {ind.title.toLowerCase()}
                       <Icon name="arrow" className="h-4 w-4 transition group-hover:translate-x-1" />
                     </Link>
                   </div>
