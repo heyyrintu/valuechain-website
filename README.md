@@ -25,7 +25,7 @@ To add a page, put the HTML in `site/`, add an entry to `pages` in `scripts/site
 
 ## Contact form
 
-Set `FORM_ACCESS_KEY` (a free key from https://web3forms.com) at build time, for example `docker build --build-arg FORM_ACCESS_KEY=xxxx .`. Without it, the form opens the visitor's email client with the message filled in.
+Submissions go to Web3Forms and arrive at the inbox the access key was created for. Put the key in `formAccessKey` in `scripts/site.config.mjs`, or set the `FORM_ACCESS_KEY` environment variable at build time (it takes precedence). Web3Forms keys are public by design: they can only send to their own inbox, so committing one is safe. Without a key, the form opens the visitor's email client with the message filled in. A hidden honeypot field drops bot submissions.
 
 ## Deploy
 

@@ -173,22 +173,26 @@ ${page.noindex ? '' : `<link rel="canonical" href="${url}">\n<link rel="alternat
 }
 
 // ── Contact form ───────────────────────────────────────────────────────────
-// Posts to Web3Forms when FORM_ACCESS_KEY is set at build time; otherwise
-// falls back to opening the visitor's mail client with the message filled in.
+// Posts to Web3Forms using FORM_ACCESS_KEY (build-time env) or
+// site.formAccessKey in site.config.mjs. Web3Forms access keys are public by
+// design: they only allow sending to the inbox they were created for. With no
+// key, the form falls back to opening the visitor's mail client.
+const formKey = process.env.FORM_ACCESS_KEY || site.formAccessKey || '';
 const formScript = `<script>
 (function(){
   var f=document.getElementById('contact-form'); if(!f) return;
-  var KEY=${JSON.stringify(process.env.FORM_ACCESS_KEY || '')};
+  var KEY=${JSON.stringify(formKey)};
   var st=document.getElementById('form-status');
   function say(t){ st.textContent=t; st.hidden=false; st.style.display="block"; }
   f.addEventListener('submit',function(e){
     e.preventDefault();
     if(!f.reportValidity()) return;
     var d=Object.fromEntries(new FormData(f));
+    if(d.botcheck) return;
     var body='Name: '+d.name+'\\nCompany: '+(d.company||'')+'\\nEmail: '+d.email+'\\nPhone: '+(d.phone||'')+'\\nInterest: '+d.interest+'\\n\\n'+(d.message||'');
     if(!KEY){ location.href='mailto:${site.email}?subject='+encodeURIComponent('Enquiry: '+d.interest)+'&body='+encodeURIComponent(body); say('Your email app should open with the message ready to send.'); return; }
     var b=f.querySelector('button[type=submit]'); b.disabled=true; say('Sending...');
-    fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(Object.assign({access_key:KEY,subject:'Website enquiry: '+d.interest,from_name:'dronavaluechain.com'},d))})
+    fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(Object.assign({access_key:KEY,subject:'Website enquiry: '+d.interest+' ('+(d.company||d.name)+')',from_name:'dronavaluechain.com',replyto:d.email},d))})
       .then(function(r){return r.json();})
       .then(function(r){ if(!r.success) throw 0; f.reset(); say('Thank you. We have your message and will reply within one working day.'); })
       .catch(function(){ say('Something went wrong. Please email ${site.email}.'); })
@@ -215,6 +219,8 @@ function wireForm(html) {
   for (const [id, name] of Object.entries(names)) {
     html = html.replace(`id="${id}"`, `id="${id}" name="${name}"${required.has(id) ? ' required' : ''}`);
   }
+  // Honeypot: hidden from people, filled by bots; Web3Forms also rejects it.
+  html = html.replace(/<form id="contact-form"[^>]*>/, '$&<input type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" aria-hidden="true" style="display: none">');
   html = html.replace(
     'We use these details only to reply to you.</span>',
     'We use these details only to reply to you.<span id="form-status" role="status" aria-live="polite" hidden style="margin-top: 6px; font-weight: 600; color: #087b84"></span></span>',
