@@ -1,46 +1,32 @@
-# Drona Logitech Website
+# Drona Valuechain website
 
-Corporate website built with Next.js (static export) + Tailwind CSS.
-
-## Run locally
+Marketing site for dronavaluechain.com: 7 pages, a gradient and glass design, and scroll-driven motion. The design-approved HTML lives in `site/`. A small build script with no dependencies adds the SEO, AEO, GEO and AIO layer and writes the deployable site to `out/`.
 
 ```bash
-npm install
-npm run dev        # http://localhost:3000
+npm run build   # site/ -> out/
+npm run dev     # build, then serve out/ at http://localhost:3000
 ```
 
-## Build for deployment
+## Layout
 
-```bash
-npm run build
-```
-
-The static site is generated in the `out/` folder. Upload the **contents** of `out/` to your hosting (cPanel File Manager → public_html, or via FTP). That's the entire deployment.
-
-## Editing content
-
-| What | Where |
+| Path | What |
 |---|---|
-| Contact details, services, industries, stats, nav | `lib/site.js` (single source of truth) |
-| Page content | `app/<page>/page.jsx` |
-| Blog posts | Add a `.md` file in `content/posts/` (copy an existing one as a template), then rebuild |
-| Colors/fonts | `tailwind.config.js` |
-| Logo | Put `logo.svg`/`logo.png` in `public/images/` and swap the placeholder "D" mark in `components/Header.jsx` and `components/Footer.jsx` |
-| Photos | Drop into `public/images/` and reference as `/images/filename.jpg` |
+| `site/*.html`, `site/assets/` | Pages and assets exactly as designed. Edit copy and design here. |
+| `scripts/site.config.mjs` | Titles, descriptions, URLs, company facts and FAQs used for meta tags, JSON-LD and llms.txt |
+| `scripts/build.mjs` | Build: clean URLs, `<head>`, structured data, sitemap, robots, llms.txt, 404, contact form |
+| `nginx.conf`, `Dockerfile` | Production serving, plus 301 redirects from the old website's URLs |
+| `docs/SEO.md` | What is optimised and the manual steps after launch |
+
+## URLs
+
+`/`, `/about/`, `/services/`, `/services/warehousing/`, `/services/in-plant-logistics/`, `/services/transportation/`, `/services/3pl/`, `/services/4pl/`, `/services/aftermarket-logistics/`, `/industries/`, `/technology/`, `/contact/`.
+
+To add a page, put the HTML in `site/`, add an entry to `pages` in `scripts/site.config.mjs`, and link to it as `name.html`. The build rewrites the link.
 
 ## Contact form
 
-The form currently opens the visitor's email client (mailto fallback). To get submissions delivered to your inbox silently:
+Set `FORM_ACCESS_KEY` (a free key from https://web3forms.com) at build time, for example `docker build --build-arg FORM_ACCESS_KEY=xxxx .`. Without it, the form opens the visitor's email client with the message filled in.
 
-1. Create a free access key at https://web3forms.com (takes 1 minute, just needs your email)
-2. Paste the key into `WEB3FORMS_ACCESS_KEY` in `components/ContactForm.jsx`
-3. Rebuild and redeploy
+## Deploy
 
-## TODOs before launch
-
-- [ ] Confirm email, phone, full street address in `lib/site.js`
-- [ ] Add real logo to `public/images/` and update Header/Footer
-- [ ] Replace leadership placeholders in `app/about/page.jsx`
-- [ ] Replace client logo placeholders and testimonials in `app/clients/page.jsx`
-- [ ] Add Web3Forms key for the contact form
-- [ ] Add real operations photos
+`docker build -t dronavaluechain . && docker run -p 80:80 dronavaluechain`. You can also upload the contents of `out/` to any static host. If you do, recreate the redirects in `nginx.conf` there.

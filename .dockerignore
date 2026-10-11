@@ -1,8 +1,7 @@
 # Keep the build context small and avoid copying host-built artifacts into
-# the image — the container runs its own `npm ci && npm run build`.
+# the image — the container runs its own `node scripts/build.mjs`.
 
 node_modules
-.next
 out
 
 .git
@@ -22,3 +21,6 @@ dev-server.log
 # Docker's own files aren't needed inside the build context
 Dockerfile
 .dockerignore
+
+# Not needed to build the site
+docs
