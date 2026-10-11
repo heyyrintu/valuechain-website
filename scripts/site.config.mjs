@@ -29,7 +29,7 @@ export const site = {
   sameAs: ['https://www.linkedin.com/company/dronavaluechain'],
   // Web3Forms access key for the contact form (public by design). The
   // FORM_ACCESS_KEY environment variable overrides it at build time.
-  formAccessKey: '',
+  formAccessKey: '623aef1f-3cde-4090-a26d-5e8caa4d06ba',
   indexNowKey: '7f3c9a2e5d8b4f61a0c4e2b9d7a15e38',
 };
 
