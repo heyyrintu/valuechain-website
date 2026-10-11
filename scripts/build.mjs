@@ -197,6 +197,17 @@ const formScript = `<script>
 })();
 </script>`;
 
+// SVG <animateMotion> ignores the CSS reduced-motion rule, so pause every
+// inline SVG while the visitor asks for reduced motion, and resume if the
+// preference is turned off.
+const motionScript = `<script>
+(function(){
+  var mq=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)'); if(!mq) return;
+  function apply(){ document.querySelectorAll('svg').forEach(function(s){ if(s.pauseAnimations){ mq.matches?s.pauseAnimations():s.unpauseAnimations(); } }); }
+  apply(); (mq.addEventListener?mq.addEventListener('change',apply):mq.addListener(apply));
+})();
+</script>`;
+
 function wireForm(html) {
   const names = { 'g-name': 'name', 'g-company': 'company', 'g-email': 'email', 'g-phone': 'phone', 'g-interest': 'interest', 'g-msg': 'message' };
   const required = new Set(['g-name', 'g-email', 'g-interest']);
@@ -228,6 +239,7 @@ function transform(html, page) {
   // Below-the-fold images: lazy. The first image (hero or logo) stays eager.
   let n = 0;
   html = html.replace(/<img (?![^>]*loading=)/g, (m) => (n++ < 2 ? '<img decoding="async" ' : '<img loading="lazy" decoding="async" '));
+  if (html.includes('<animate')) html = html.replace('</body>', `${motionScript}\n</body>`);
   if (page.file === 'contact.html') html = wireForm(html);
   return html;
 }
