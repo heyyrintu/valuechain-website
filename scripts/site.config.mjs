@@ -26,8 +26,7 @@ export const site = {
     'Reverse logistics', 'Cold chain', 'Quick commerce fulfilment', 'Warehouse management system (WMS)',
     'Transport management system (TMS)', 'Supply chain control tower',
   ],
-  // Add the real LinkedIn company URL here (and in the footer) once it exists.
-  sameAs: [],
+  sameAs: ['https://www.linkedin.com/company/dronavaluechian'],
   indexNowKey: '7f3c9a2e5d8b4f61a0c4e2b9d7a15e38',
 };
 
