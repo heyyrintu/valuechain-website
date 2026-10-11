@@ -23,7 +23,7 @@ in-plant-logistics.html, transportation.html, 3pl.html, 4pl.html, aftermarket-lo
                     Service detail pages built from the warehousing template
 industries.html     Four sectors + corridors and roadmap
 technology.html     IPMS: data flow, stack tabs, benefits, control-tower preview
-contact.html        Contact form, office map placeholder, FAQ
+contact.html        Contact form, Google Maps embed, FAQ
 assets/css/site.css Design system: tokens-in-use, glass, motion, noise, responsive rules
 assets/img/         Section illustrations (WebP, colour-matched to the cream background)
 assets/brand/       Logo symbol, reversed logo (for dark backgrounds), full logo, favicon
@@ -80,7 +80,7 @@ Every page repeats the same nav, CTA band and footer. If you refactor into a fra
 
 ## Open items / TODO
 - [x] Contact form: wired by the build (Web3Forms via `FORM_ACCESS_KEY`, mailto fallback), with validation and a status message.
-- [ ] Office map: placeholder SVG. Replace it with a Google Maps embed for Pioneer Urban Square, Gurugram.
+- [x] Office map: Google Maps embed (keyless `output=embed` URL) for Pioneer Urban Square, Gurugram, with an "Open in Google Maps" link.
 - [ ] EMS module scope: shown as `[Module scope]` on the Home, Technology and stack tabs. Waiting on copy from DVPL.
 - [x] Service pages: all six exist (`/services/<slug>/`) and the "Learn more" cards and footer link to them. The capability-card icons reuse the warehousing set; swap in service-specific icons if the designer supplies them.
 - [ ] LinkedIn URL in the footer is a placeholder (`https://www.linkedin.com/`).
