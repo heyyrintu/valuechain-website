@@ -33,11 +33,11 @@ export const site = {
 
 const services = [
   { name: 'Integrated warehousing', path: '/services/warehousing/', description: 'Mother, regional, base and micro-warehouses, all leased, with inventory management and value-added services for OEMs.' },
-  { name: 'In-plant logistics', description: 'Managed plant stores, material handling, line feeding, kitting and sequencing, and yard and dock management inside OEM plants.' },
-  { name: 'Transportation', description: 'Supplier milk runs, line haul between clusters, JIT / JIS delivery to the line, FTL / PTL and secondary distribution.' },
-  { name: 'Third-party logistics (3PL)', description: 'Warehousing and transportation under one contract, with agreed service levels.' },
-  { name: 'Fourth-party logistics (4PL)', description: 'Orchestration of the entire logistics network, including other vendors, through a single control tower.' },
-  { name: 'Aftermarket and reverse logistics', description: 'Spares warehousing, spares milk runs, returns and reverse logistics, and returnable packaging.' },
+  { name: 'In-plant logistics', path: '/services/in-plant-logistics/', description: 'Managed plant stores, material handling, line feeding, kitting and sequencing, and yard and dock management inside OEM plants.' },
+  { name: 'Transportation', path: '/services/transportation/', description: 'Supplier milk runs, line haul between clusters, JIT / JIS delivery to the line, FTL / PTL and secondary distribution.' },
+  { name: 'Third-party logistics (3PL)', path: '/services/3pl/', description: 'Warehousing and transportation under one contract, with agreed service levels.' },
+  { name: 'Fourth-party logistics (4PL)', path: '/services/4pl/', description: 'Orchestration of the entire logistics network, including other vendors, through a single control tower.' },
+  { name: 'Aftermarket and reverse logistics', path: '/services/aftermarket-logistics/', description: 'Spares warehousing, spares milk runs, returns and reverse logistics, and returnable packaging.' },
 ];
 
 // path: clean URL the page is served at. priority feeds sitemap.xml.
@@ -71,6 +71,23 @@ export const pages = [
     image: '/assets/img/warehouse.webp',
     services: [services[0]],
   },
+  ...[
+    ['in-plant-logistics.html', 1, 'In-plant logistics', 'In-Plant Logistics, JIT / JIS Line Feeding | Drona Valuechain',
+      'Managed plant stores, material handling, JIT / JIS line feeding, kitting and sequencing, and yard and dock management inside OEM plants.', '/assets/img/inplant-logistics.webp'],
+    ['transportation.html', 2, 'Transportation', 'Milk Run, Line Haul and JIT Transport | Drona Valuechain',
+      'Supplier milk runs, line haul between clusters, JIT / JIS delivery to the line, FTL / PTL, secondary distribution and last mile, planned on our TMS.', '/assets/img/hero-cluster-overview.webp'],
+    ['3pl.html', 3, '3PL', '3PL Logistics Services for OEMs in India | Drona Valuechain',
+      'Third-party logistics (3PL): warehousing and transportation executed under one contract, with agreed service levels and shared dashboards.', '/assets/img/warehouse.webp'],
+    ['4pl.html', 4, '4PL orchestration', '4PL Logistics and Control Tower | Drona Valuechain',
+      'Fourth-party logistics (4PL): your entire logistics network, including other vendors, orchestrated through a single control tower.', '/assets/img/ipms-technology.webp'],
+    ['aftermarket-logistics.html', 5, 'Aftermarket and reverse', 'Aftermarket, Spares and Reverse Logistics | Drona Valuechain',
+      'Spares warehousing, spares milk runs to dealers, returns and reverse logistics, and tracked returnable bins, crates and pallets.', '/assets/img/warehouse.webp'],
+  ].map(([file, i, name, title, description, image]) => ({
+    file, name, title, description, image, priority: '0.8',
+    path: `/services/${file.replace('.html', '')}/`,
+    parents: [{ name: 'Services', path: '/services/' }],
+    services: [services[i]],
+  })),
   {
     file: 'industries.html', path: '/industries/', name: 'Industries', priority: '0.8',
     title: 'Industries: Automotive, Electronics, D2C | Drona Valuechain',

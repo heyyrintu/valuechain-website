@@ -19,7 +19,7 @@ npm run dev     # build, then serve out/ at http://localhost:3000
 
 ## URLs
 
-`/`, `/about/`, `/services/`, `/services/warehousing/`, `/industries/`, `/technology/`, `/contact/`.
+`/`, `/about/`, `/services/`, `/services/warehousing/`, `/services/in-plant-logistics/`, `/services/transportation/`, `/services/3pl/`, `/services/4pl/`, `/services/aftermarket-logistics/`, `/industries/`, `/technology/`, `/contact/`.
 
 To add a page, put the HTML in `site/`, add an entry to `pages` in `scripts/site.config.mjs`, and link to it as `name.html`. The build rewrites the link.
 

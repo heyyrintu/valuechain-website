@@ -216,7 +216,7 @@ function transform(html, page) {
   html = html.replace(/<head>[\s\S]*?<\/head>/, head(page));
   html = html.replace('<html lang="en">', '<html lang="en-IN">');
   // Links: about.html -> /about/, keeping any #fragment.
-  html = html.replace(/href="([a-z-]+)\.html(#[^"]*)?"/g, (m, f, hash = '') =>
+  html = html.replace(/href="([a-z0-9-]+)\.html(#[^"]*)?"/g, (m, f, hash = '') =>
     routeOf[`${f}.html`] ? `href="${routeOf[`${f}.html`]}${hash}"` : m,
   );
   html = html.replace(/(src|href)="assets\//g, '$1="/assets/');
