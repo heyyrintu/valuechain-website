@@ -26,7 +26,7 @@ export const site = {
     'Reverse logistics', 'Cold chain', 'Quick commerce fulfilment', 'Warehouse management system (WMS)',
     'Transport management system (TMS)', 'Supply chain control tower',
   ],
-  sameAs: ['https://www.linkedin.com/company/dronavaluechian'],
+  sameAs: ['https://www.linkedin.com/company/dronavaluechain'],
   indexNowKey: '7f3c9a2e5d8b4f61a0c4e2b9d7a15e38',
 };
 
