@@ -10,7 +10,7 @@
 //
 // No dependencies: `node scripts/build.mjs`.
 
-import { cpSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { cpSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { site, pages, faqs } from './site.config.mjs';
@@ -23,6 +23,63 @@ const today = new Date().toISOString().slice(0, 10);
 rmSync(out, { recursive: true, force: true });
 mkdirSync(out, { recursive: true });
 cpSync(join(src, 'assets'), join(out, 'assets'), { recursive: true });
+
+// ── Performance helpers ────────────────────────────────────────────────────
+// Self-hosted fonts and the stylesheet are inlined into every page, so the
+// first paint needs no extra requests (no render-blocking CSS, no font chain
+// through fonts.googleapis.com and fonts.gstatic.com).
+const fontFaces = [
+  ['Bricolage Grotesque', 'normal', '200 800', 'bricolage-grotesque'],
+  ['Instrument Serif', 'italic', '400', 'instrument-serif-italic'],
+  ['Geist', 'normal', '100 900', 'geist'],
+  ['Geist Mono', 'normal', '500', 'geist-mono-500'],
+].map(([family, style, weight, file]) =>
+  `@font-face{font-family:'${family}';font-style:${style};font-weight:${weight};font-display:swap;src:url(/assets/fonts/${file}.woff2) format('woff2')}`,
+).join('');
+const inlineCss = fontFaces + readFileSync(join(src, 'assets/css/site.css'), 'utf8').replace(/\n\s+/g, '\n');
+
+// Intrinsic size of a PNG or WebP, read from the file header, so every <img>
+// gets width/height attributes and the browser can reserve its space.
+const sizeCache = new Map();
+function imageSize(rel) {
+  if (sizeCache.has(rel)) return sizeCache.get(rel);
+  const file = join(src, rel);
+  let size = null;
+  if (existsSync(file)) {
+    const b = readFileSync(file);
+    if (b.toString('ascii', 1, 4) === 'PNG') size = [b.readUInt32BE(16), b.readUInt32BE(20)];
+    else if (b.toString('ascii', 8, 12) === 'WEBP') {
+      const chunk = b.toString('ascii', 12, 16);
+      if (chunk === 'VP8X') size = [1 + b.readUIntLE(24, 3), 1 + b.readUIntLE(27, 3)];
+      else if (chunk === 'VP8 ') size = [b.readUInt16LE(26) & 0x3fff, b.readUInt16LE(28) & 0x3fff];
+      else if (chunk === 'VP8L') { const v = b.readUInt32LE(21); size = [1 + (v & 0x3fff), 1 + ((v >> 14) & 0x3fff)]; }
+    }
+  }
+  sizeCache.set(rel, size);
+  return size;
+}
+
+// Adds width/height, a responsive srcset for illustrations that have an
+// -800 variant, and loading hints: the nav logo and the first illustration in
+// the hero load eagerly (the illustration with high priority), the rest lazily.
+function optimiseImages(html) {
+  const heroEnd = html.indexOf('</section>');
+  let heroDone = false;
+  return html.replace(/<img ([^>]*?)src="\/(assets\/[^"]+)"([^>]*)>/g, (m, pre, rel, post, offset) => {
+    let attrs = `${pre}src="/${rel}"${post}`;
+    const size = imageSize(rel);
+    if (size && !/\bwidth=/.test(attrs)) attrs += ` width="${size[0]}" height="${size[1]}"`;
+    const small = rel.replace(/\.webp$/, '-800.webp');
+    if (small !== rel && existsSync(join(src, small)) && size) {
+      attrs += ` srcset="/${small} 800w, /${rel} ${size[0]}w" sizes="(max-width: 900px) 92vw, 640px"`;
+    }
+    const isHero = rel.startsWith('assets/img/') && offset < heroEnd && !heroDone;
+    if (isHero) heroDone = true;
+    const eager = isHero || (rel.includes('logo-symbol') && offset < heroEnd);
+    attrs += eager ? ` decoding="async"${isHero ? ' fetchpriority="high"' : ''}` : ' loading="lazy" decoding="async"';
+    return `<img ${attrs}>`;
+  });
+}
 
 const routeOf = Object.fromEntries(pages.map((p) => [p.file, p.path]));
 const abs = (path) => site.url + path;
@@ -164,10 +221,9 @@ ${page.noindex ? '' : `<link rel="canonical" href="${url}">\n<link rel="alternat
 <link rel="manifest" href="/site.webmanifest">
 <link rel="alternate" type="text/plain" title="LLM summary" href="/llms.txt">
 <link rel="sitemap" type="application/xml" href="/sitemap.xml">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..700&amp;family=Instrument+Serif:ital@0;1&amp;family=Geist:wght@400..700&amp;family=Geist+Mono:wght@500&amp;display=swap">
-<link rel="stylesheet" href="/assets/css/site.css">
+<link rel="preload" href="/assets/fonts/bricolage-grotesque.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/geist.woff2" as="font" type="font/woff2" crossorigin>
+<style>${inlineCss}</style>
 <script type="application/ld+json">${graphFor(page)}</script>
 </head>`;
 }
@@ -242,9 +298,7 @@ function transform(html, page) {
   html = html.replace(/<a href="(https?:\/\/[^"]+)"(?![^>]*rel=)/g, '<a href="$1" rel="noopener"');
   // Landmark: everything between the nav and the footer is the main content.
   html = html.replace(/<section/, '<main id="main"><section').replace(/<footer/, '</main><footer');
-  // Below-the-fold images: lazy. The first image (hero or logo) stays eager.
-  let n = 0;
-  html = html.replace(/<img (?![^>]*loading=)/g, (m) => (n++ < 2 ? '<img decoding="async" ' : '<img loading="lazy" decoding="async" '));
+  html = optimiseImages(html);
   if (html.includes('<animate')) html = html.replace('</body>', `${motionScript}\n</body>`);
   if (page.file === 'contact.html') html = wireForm(html);
   return html;
@@ -364,6 +418,63 @@ writeFileSync(
     null,
     2,
   ),
+);
+
+// .htaccess for Apache/LiteSpeed hosts (Hostinger). Mirrors nginx.conf: one
+// redirect hop to the canonical https apex, old-site URLs, long cache lifetimes
+// for static assets, compression and the custom 404 page.
+writeFileSync(
+  join(out, '.htaccess'),
+  `# Generated by scripts/build.mjs. Edit there, not here.
+Options -Indexes
+DirectoryIndex index.html
+ErrorDocument 404 /404.html
+
+<IfModule mod_rewrite.c>
+RewriteEngine On
+
+# http:// or www. -> https://dronavaluechain.com in a single 301.
+RewriteCond %{HTTPS} !=on [OR]
+RewriteCond %{HTTP_HOST} ^www\\. [NC]
+RewriteCond %{HTTP_HOST} (^|\\.)dronavaluechain\\.com$ [NC]
+RewriteRule ^ https://dronavaluechain.com%{REQUEST_URI} [L,R=301]
+
+# Old website URLs -> closest new page.
+RewriteRule ^services/(in-plant-services|manpower-supply)/?$ /services/in-plant-logistics/ [L,R=301]
+RewriteRule ^services/(inventory-management|packaging-solutions)/?$ /services/warehousing/ [L,R=301]
+RewriteRule ^services/last-mile-delivery/?$ /services/transportation/ [L,R=301]
+RewriteRule ^industries/(pharmaceutical|automotive|fmcg-retail)/?$ /industries/ [L,R=301]
+RewriteRule ^(blog|clients)(/.*)?$ / [L,R=301]
+RewriteRule ^(about|services|industries|technology|contact)\\.html$ /$1/ [L,R=301]
+RewriteRule ^(warehousing|in-plant-logistics|transportation|3pl|4pl|aftermarket-logistics)\\.html$ /services/$1/ [L,R=301]
+</IfModule>
+
+<IfModule mod_mime.c>
+AddType application/manifest+json .webmanifest
+AddType font/woff2 .woff2
+AddCharset utf-8 .html .txt .xml .webmanifest
+</IfModule>
+
+<IfModule mod_deflate.c>
+AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css application/javascript application/json application/xml application/manifest+json image/svg+xml
+</IfModule>
+
+<IfModule mod_headers.c>
+Header always set X-Content-Type-Options "nosniff"
+Header always set Referrer-Policy "strict-origin-when-cross-origin"
+Header always set X-Frame-Options "SAMEORIGIN"
+# Fonts never change under a given name; images rarely do.
+<FilesMatch "\\.(woff2)$">
+Header set Cache-Control "public, max-age=31536000, immutable"
+</FilesMatch>
+<FilesMatch "\\.(webp|png|jpe?g|svg|ico)$">
+Header set Cache-Control "public, max-age=2592000"
+</FilesMatch>
+<FilesMatch "\\.(html|xml|txt|webmanifest)$">
+Header set Cache-Control "no-cache"
+</FilesMatch>
+</IfModule>
+`,
 );
 
 // IndexNow key file (Bing, Yandex, Seznam). Harmless if never pinged.
