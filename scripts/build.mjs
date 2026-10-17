@@ -97,7 +97,7 @@ const organization = {
   legalName: site.legalName,
   alternateName: ['DVPL', 'Drona Valuechain'],
   url: site.url + '/',
-  logo: { '@type': 'ImageObject', url: abs('/assets/brand/logo-full.png'), width: 900, height: 698 },
+  logo: { '@type': 'ImageObject', url: abs('/assets/brand/logo-full.png'), width: 951, height: 739 },
   image: abs('/assets/brand/og-image.png'),
   description: site.description,
   email: site.email,
